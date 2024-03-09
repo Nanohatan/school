@@ -1,0 +1,35 @@
+[{
+    "name":"AR1",
+    "params":
+    {
+        "a":2,
+        "b":1,
+        "c":3,
+        "d":1,
+        "moumentum":0.5,
+        "velocity":1
+    }
+},
+{
+    "name":"AR2",
+    "params":{
+    "a":2,
+    "b":4,
+    "c":2.5,
+    "d":4,
+    "moumentum":0.5,
+    "velocity":1
+    }
+},
+{
+    "name":"AR3",
+    "params":{
+    "a":2,
+    "b":16,
+    "c":2.37,
+    "d":16,
+    "moumentum":0.8,
+    "velocity":3
+    }
+}
+]
