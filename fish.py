@@ -67,7 +67,7 @@ class fish():
         print(total_f)
         next_v = (total_f + self.alpha*self.v)/np.linalg.norm((total_f + self.alpha*self.v))
 
-        next_position = self.position + total_f*self.v
+        next_position = self.position + self.v
         self.history.append(next_position)
         self.v_history.append(next_v)
     def get_total_f(self,neighbors):
