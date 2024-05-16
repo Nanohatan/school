@@ -46,9 +46,9 @@ for step in range(num_steps):
         velocity[i] = normalize_vector(combined_vector) * np.linalg.norm(velocity[i])
         
         # ランダムな動き
-        if step % steps_between_random_movement == 0:
-            random_direction = np.random.rand(2) - 0.5
-            velocity[i] += normalize_vector(random_direction) * np.linalg.norm(velocity[i]) * 0.1
+        # if step % steps_between_random_movement == 0:
+        #     random_direction = np.random.rand(2) - 0.5
+        #     velocity[i] += normalize_vector(random_direction) * np.linalg.norm(velocity[i]) * 0.1
             
         positions[i] += velocity[i]
         

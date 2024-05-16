@@ -11,9 +11,9 @@ class school():
     def create_fish(self,params,n):
         for _ in range(n):
             id = len(self.fish_list)
-            _fish = fish(id,v=np.random.rand(2),position=((np.random.rand(2))*10)+[50,50],
+            _f = _fish(id,v=np.random.rand(2),position=((np.random.rand(2))*10)+[50,50],
                          params=params["params"])
-            self.fish_list.append(_fish)
+            self.fish_list.append(_f)
         
     def simulate(self,n_step):
         for step in range(n_step):
@@ -23,7 +23,7 @@ class school():
                 self.update()
     def update(self):
         for ind in range(len(self.fish_list)):
-            self.fish_list[ind].update(np.delete(self.fish_list, ind))
+            self.fish_list[ind].move(np.delete(self.fish_list, ind))
         for i in self.fish_list:
             i.position = i.history[-1]
             i.v = i.v_history[-1]
@@ -47,7 +47,7 @@ class school():
         return np.array(matrix)
     
 
-class fish():
+class  _fish():
     def __init__(self, id, v, position, params):
         self.id = id
         self.v = params["velocity"] * v/np.linalg.norm(v)
@@ -62,7 +62,7 @@ class fish():
         self.d=params["d"]
         self.alpha = params["moumentum"]
 
-    def update(self,neighbors):
+    def move(self,neighbors):
         total_f = self.get_total_f(neighbors)
         print(total_f)
         next_v = (total_f + self.alpha*self.v)/np.linalg.norm((total_f + self.alpha*self.v))
