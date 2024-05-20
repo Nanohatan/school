@@ -18,7 +18,9 @@ school.create_fish(params2,n-n_params1)
 fig,ax = plt.subplots()
 ax.grid()
 xy = school.get_position()
-ax.scatter(xy[:,0],xy[:,1])
+for name in ["AR1","AR2"]:
+    ax.scatter(xy[name][:,0],xy[name][:,1])
+
 
 for i in range(100):
     school.update()

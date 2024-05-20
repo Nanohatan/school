@@ -3,18 +3,20 @@ np.random.seed(100)
 class school():
     def __init__(self) -> None:
         self.fish_list = []
+        self.fish_type_list = []
         # for id in range(n):
         #     v = np.random.rand(2)
         #     self.fish_list.append(fish(id,v=np.random.rand(2),position=((np.random.rand(2))*10)+[50,50]))
             
         # self.fish_list = np.array(self.fish_list)
-    def create_fish(self,params,n):
+    def create_fish(self,json,n):
+        self.fish_type_list.append(json["name"])
         for _ in range(n):
             id = len(self.fish_list)
             _f = _fish(id,v=np.random.rand(2),position=((np.random.rand(2))*10)+[50,50],
-                         params=params["params"])
+                         json=json)
             self.fish_list.append(_f)
-        
+
     def simulate(self,n_step):
         for step in range(n_step):
             if step%15 == 0:
@@ -35,10 +37,14 @@ class school():
             i.position = i.history[-1]
             i.v = i.v_history[-1]
     def get_position(self):
-        xy = []
+        xy = {}
+        for name in self.fish_type_list:
+            xy[name] = []
         for fish in self.fish_list:
-            xy.append(fish.history[-1])
-        xy = np.array(xy)
+            xy[fish.type_name].append(fish.history[-1])
+        #xy = np.array(xy)
+        for name in self.fish_type_list:
+            xy[name] = np.array(xy[name])
         return xy
     def get_history(self):
         matrix = []
@@ -48,8 +54,10 @@ class school():
     
 
 class  _fish():
-    def __init__(self, id, v, position, params):
+    def __init__(self, id, v, position, json):
         self.id = id
+        self.type_name = json["name"]
+        params = json["params"]
         self.v = params["velocity"] * v/np.linalg.norm(v)
         self.position = position
         self.history = [position]
@@ -64,7 +72,6 @@ class  _fish():
 
     def move(self,neighbors):
         total_f = self.get_total_f(neighbors)
-        print(total_f)
         next_v = (total_f + self.alpha*self.v)/np.linalg.norm((total_f + self.alpha*self.v))
 
         next_position = self.position + self.v
