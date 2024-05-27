@@ -8,8 +8,6 @@ import matplotlib.pyplot as plt
 
 np.random.seed(100)
 
-
-
 class SwarmSimulation():
     def __init__(self,n,iteration:int) -> None:
         logger = getLogger(__name__)

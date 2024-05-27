@@ -1,8 +1,8 @@
 import os
-import bug
+import bug_numpy
 
 import numpy as np
 from scipy.spatial import distance
 
-os.remove("SwarmSimulation.log")
-bug.SwarmSimulation(5,5)
+
+bug_numpy.SwarmSim(3)
