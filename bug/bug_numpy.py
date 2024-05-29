@@ -17,10 +17,19 @@ class SwarmSim():
         self.position = np.random.rand(n,2)
         self.hist_pos[0] = self.position
 
-        self.vector = np.random.rand(n,2) * 0.1
+        self.vector = np.random.uniform(-0.1,0.1,(n,2)) 
         self.hist_v[0] = self.vector
 
+        self.th_rep = 0.1
+        self.th_attr = 0.15
+
         self.dist_matrix = self.get_dist_matrix()
+
+        # 遠すぎる
+        print(np.where(self.dist_matrix > self.th_attr, 1, 0))
+        # 近すぎる
+        print(np.where((self.dist_matrix < self.th_rep) & (self.dist_matrix != 0), 1, 0))
+        self.draw()
 
     def move(self):
         pass
@@ -44,4 +53,19 @@ class SwarmSim():
         
         for i in range(self.n):
             ax.text(xy[i,0],xy[i,1],i)
+
+        # 各中心点に対して円を描く
+        radius = self.th_rep
+        
+        for center in xy:
+            theta = np.linspace(0, 2 * np.pi, 100)
+            x = center[0] + radius * np.cos(theta)
+            y = center[1] + radius * np.sin(theta)
+            ax.plot(x,y,c="blue", alpha=0.2)
+
+            x = center[0] + self.th_attr * np.cos(theta)
+            y = center[1] + self.th_attr * np.sin(theta)
+            ax.plot(x,y,c="red", alpha=0.2)
+
+
         plt.show()

@@ -5,4 +5,4 @@ import numpy as np
 from scipy.spatial import distance
 
 
-bug_numpy.SwarmSim(3)
+bug_numpy.SwarmSim(10)
