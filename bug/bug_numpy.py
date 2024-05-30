@@ -6,16 +6,18 @@ from logging import getLogger
 import numpy as np
 from scipy.spatial import Delaunay,distance
 import matplotlib.pyplot as plt
-
+import imageio
+import glob
 np.random.seed(100)
 
 class SwarmSim():
-    def __init__(self,n:int,nstep:int=5, logger=None) -> None:
+    def __init__(self,n:int,nstep:int=20, logger=None) -> None:
         self.n = n
         self.hist_pos = np.zeros((nstep,n,2))
         self.hist_v = np.zeros((nstep,n,2))
         
-        self.position = np.random.uniform(-5,5,(n,2))
+        field = 10
+        self.position = np.random.uniform(-field,field,(n,2))
         self.hist_pos[0] = self.position
 
         self.vector = np.random.uniform(-0.1,0.1,(n,2)) 
@@ -25,14 +27,24 @@ class SwarmSim():
         self.vector  = self.vector / norms[:, np.newaxis]
         self.hist_v[0] = self.vector 
 
-        self.intract_r = 2
+        self.intract_r = 4
         self.th_rep = 1
         self.th_attr = 1.5
-        
-        self.draw()
+        self.speed = 1
+
+
+        # シミュレーション実行
         for step in range(nstep):
+            self.draw(f"{str(step).zfill(3)}_")
             self.next_step()
-            self.draw(f"{step}_")
+        self.draw(f"{str(step).zfill(3)}_")
+
+        # gif 作成
+        dir = os.path.dirname(__file__)
+        list_of_im_paths = sorted(glob.glob(os.path.join(dir,"img/**.png")))
+        path_to_save_gif = os.path.join(dir,"img/ani.gif")
+        ims = [imageio.imread(f) for f in list_of_im_paths]
+        imageio.mimwrite(path_to_save_gif, ims,loop=0)
             
 
     def next_step(self):
@@ -49,11 +61,11 @@ class SwarmSim():
             v = np.divide(np.dot(self.vector.T,m[i]), np.sum(m[i]))
             vector[i] = v
         
-        self.vector = self.to_unit(vector)
+        self.vector = self.to_unit(vector) + np.random.uniform(-0.5,0.5,(self.n,2))
 
 
     def update_pos(self):
-        self.position = self.position + self.vector
+        self.position = self.position + self.speed*self.vector
 
     
     def get_dist_matrix(self):
@@ -69,7 +81,7 @@ class SwarmSim():
         xy = self.position
 
         fig,ax = plt.subplots()
-        lim = 10
+        lim = 25
         ax.set_xlim(-lim,lim)
         ax.set_ylim(-lim,lim)
         ax.set_aspect("equal")
@@ -89,7 +101,7 @@ class SwarmSim():
             theta = np.linspace(0, 2 * np.pi, 100)
             x = center[0] + radius * np.cos(theta)
             y = center[1] + radius * np.sin(theta)
-            ax.plot(x,y,c="blue", alpha=0.2)
+            ax.plot(x,y,c="blue", alpha=0.1)
 
             # x = center[0] + self.th_attr * np.cos(theta)
             # y = center[1] + self.th_attr * np.sin(theta)
