@@ -35,24 +35,34 @@ class SwarmSim():
 
         # シミュレーション実行
         for step in range(nstep):
-            self.draw(f"{str(step).zfill(3)}_")
-            self.next_step()
-        self.draw(f"{str(step).zfill(3)}_")
-
+            #self.draw(f"{str(step).zfill(3)}_")
+            self.next_step(step)
+        #self.draw(f"{str(step).zfill(3)}_")
+        np.save("sim_position",self.hist_pos)
+        np.save("sim_vector",self.hist_v)
         # gif 作成
-        dir = os.path.dirname(__file__)
-        list_of_im_paths = sorted(glob.glob(os.path.join(dir,"img/**.png")))
-        path_to_save_gif = os.path.join(dir,"img/ani.gif")
-        ims = [imageio.imread(f) for f in list_of_im_paths]
-        imageio.mimwrite(path_to_save_gif, ims,loop=0)
+        matrix = np.load("sim_position.npy")
+        
+        print(matrix.shape)
+
+        # dir = os.path.dirname(__file__)
+        # list_of_im_paths = sorted(glob.glob(os.path.join(dir,"img/**.png")))
+        # path_to_save_gif = os.path.join(dir,"img/ani.gif")
+        # ims = [imageio.imread(f) for f in list_of_im_paths]
+        # imageio.mimwrite(path_to_save_gif, ims,loop=0)
             
 
-    def next_step(self):
+
+    
+    def next_step(self,step):
         dist_matrix = self.get_dist_matrix()
         intract_matrix = np.where((dist_matrix < self.intract_r), 1, 0)
-        self.update_v(intract_matrix)
 
+        self.update_v(intract_matrix)
         self.update_pos()
+
+        self.hist_v[step] = self.vector
+        self.hist_pos[step] = self.position
 
     def update_v(self,m):
         vector = np.zeros((self.n,2))
